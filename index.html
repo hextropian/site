@@ -13,15 +13,17 @@
             color: #ddd;
             overflow-x: hidden;
         }
+
         .hero-section {
             position: relative;
             height: 70vh;
             display: flex;
+            justify-content: flex-end;
             align-items: center;
             text-align: center;
             color: #ffffff;
             background: url('wp1-mod.webp') no-repeat top center;
-            background-size: 100% auto; 
+            background-size: 100% auto;
         }
 
         .overlay-content {
@@ -31,6 +33,40 @@
             border: 1px solid #ffd700;
             max-width: 40%;
             color: #c7b374;
+        }
+
+        .overlay-content h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2rem; /* Main title size */
+        }
+
+        .overlay-content p.subtitle {
+            font-size: 1.2rem; /* Smaller subtitle text */
+            margin-top: 0.5rem;
+        }
+
+        .cta-message {
+            margin-top: 1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: #111;
+            background-color: #ffd700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 10px #ffd700;
+            transform: scale(1.05);
+            text-decoration: none; /* Ensures no underline appears */
         }
 
         .small-sections {
@@ -75,48 +111,88 @@
     <header class="hero-section">
         <div class="overlay-content">
             <h1>Hextropian Systems</h1>
-            <p>The Convergence of Security and GenAI</p>
+            <p class="subtitle">The Convergence of Security and GenAI</p>
+            <div class="cta-message">
+                <p>Be the first to know when we launch</p>
+                <button class="cta-button" data-toggle="modal" data-target="#subscribeModal">Stay Updated</button>
+            </div>
         </div>
     </header>
 
+    <!-- Small Sections -->
     <section class="small-sections">
-        <!-- First Row of Small Sections -->
         <div class="small-box">
             <h3>About</h3>
-            <p>We're a new company, currently in stealth mode, focusing on solving complex software supply chain 
-                problems by leveraging Generative AI and modern enterprise-class systems designs. 
+            <p>We're revolutionizing enterprise security operations by leveraging advanced agentic AI systems that automate 
+                decision-making processes with extreme accuracy and efficiency, regardless of the tools you already have.
             </p>
         </div>
         <div class="small-box">
             <h3>Team</h3>
-            <p>The management team, advisors and main investors will be announced soon.</p>
+            <p>The management team, advisors, and main investors will be announced soon.</p>
         </div>
         <div class="small-box">
             <h3>Contact</h3>
             <p><a href="mailto:hextropian@hextropian.systems?subject=Inquiry">Contact us</a> via email.</p>
         </div>
-        <!-- Second Row of Small Sections 
-        <div class="small-box">
-            <h3>Sekeereeltes</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-        <div class="small-box">
-            <h3>Cheveeltes</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-        <div class="small-box">
-            <h3>Yture Bideles</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> -->
-        </div>
     </section>
 
+    <!-- Modal Form -->
+    <div class="modal fade" id="subscribeModal" tabindex="-1" role="dialog" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color: #222; color: #c7b374; border: 1px solid #ffd700;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subscribeModalLabel">Stay Updated</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #ffd700;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="subscribeForm" action="https://docs.google.com/forms/d/e/1FAIpQLScrwJBgtWKMwkRJswRmQE0pPLCxx6AhDRLDUhKlEWZ6-fQ4TA/formResponse" method="POST" target="_blank">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="entry.842495624" required style="background-color: #333; color: #ffd700; border: 1px solid #ffd700;">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" class="form-control" id="company" name="entry.1715278832" required style="background-color: #333; color: #ffd700; border: 1px solid #ffd700;">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="entry.970417122" required style="background-color: #333; color: #ffd700; border: 1px solid #ffd700;">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone (optional)</label>
+                            <input type="tel" class="form-control" id="phone" name="entry.1287587809" style="background-color: #333; color: #ffd700; border: 1px solid #ffd700;">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffd700; color: #111; border: none;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2024 Hextropian Systems. All rights reserved.</p>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Form validation
+        document.getElementById('subscribeForm').addEventListener('submit', function (e) {
+            const name = document.getElementById('name').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const email = document.getElementById('email').value.trim();
+            if (!name || !company || !email) {
+                e.preventDefault();
+                alert('Please fill out all required fields.');
+            }
+        });
+    </script>
 </body>
 
 </html>
