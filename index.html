@@ -293,6 +293,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        // Video loading code (keep your existing video code)
         document.getElementById('bgVideo').addEventListener('loadeddata', function() {
             document.body.classList.add('video-loaded');
         });
@@ -301,14 +302,105 @@
             document.getElementById('bgVideo').setAttribute('preload', 'metadata');
         }
 
-        document.getElementById('subscribeForm').addEventListener('submit', function(e) {
-            const name = document.getElementById('name').value.trim();
-            const company = document.getElementById('company').value.trim();
-            const email = document.getElementById('email').value.trim();
-            if (!name || !company || !email) {
-                e.preventDefault();
-                alert('Please fill out all required fields.');
+        // Form validation code (new code)
+        // Forbidden email domains
+        const BLOCKED_DOMAINS = ['gmail.com', 'yahoo.com'];
+
+        // Phone number regex for international format
+        const PHONE_REGEX = /^\+?[1-9]\d{1,14}$|^$|^[0-9]{10}$/;
+
+        // Basic name validation
+        function isValidName(name) {
+            // At least 2 characters, only letters, spaces, hyphens, and apostrophes
+            const nameRegex = /^[a-zA-Z\s'-]{2,50}$/;
+            return nameRegex.test(name.trim());
+        }
+
+        // Company name validation
+        function isValidCompany(company) {
+            // At least 2 characters, allowing common business name characters
+            // Excludes obviously fake inputs with repeated characters
+            const repeatedChars = /(.)\1{4,}/;  // Checks for 5 or more repeated characters
+            if (repeatedChars.test(company)) {
+                return false;
             }
+            
+            // Allow letters, numbers, spaces, and common punctuation
+            const companyRegex = /^[a-zA-Z0-9\s'.,&()-]{2,100}$/;
+            return companyRegex.test(company.trim());
+        }
+
+        // Email validation including domain check
+        function isValidEmail(email) {
+            // Basic email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return {
+                    valid: false,
+                    message: 'Please enter a valid email address'
+                };
+            }
+            
+            // Check for blocked domains
+            const domain = email.split('@')[1].toLowerCase();
+            if (BLOCKED_DOMAINS.includes(domain)) {
+                return {
+                    valid: false,
+                    message: 'Please use a business email address'
+                };
+            }
+            
+            return {
+                valid: true,
+                message: ''
+            };
+        }
+
+        // Phone validation
+        function isValidPhone(phone) {
+            if (!phone) return true;  // Empty phone is allowed
+            return PHONE_REGEX.test(phone.replace(/[\s()-]/g, ''));  // Remove common separators before testing
+        }
+
+        // Form validation handler - replaces your existing form handler
+        document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+            e.preventDefault();  // Always prevent default first
+            
+            const name = document.getElementById('name').value;
+            const company = document.getElementById('company').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            let errors = [];
+            
+            // Validate name
+            if (!isValidName(name)) {
+                errors.push('Please enter a valid name (letters, hyphens, and apostrophes only)');
+            }
+            
+            // Validate company
+            if (!isValidCompany(company)) {
+                errors.push('Please enter a valid company name');
+            }
+            
+            // Validate email
+            const emailValidation = isValidEmail(email);
+            if (!emailValidation.valid) {
+                errors.push(emailValidation.message);
+            }
+            
+            // Validate phone if provided
+            if (!isValidPhone(phone)) {
+                errors.push('Please enter a valid phone number or leave it empty');
+            }
+            
+            if (errors.length > 0) {
+                alert(errors.join('\n'));
+                return;
+            }
+            
+            // If validation passes, submit the form
+            this.submit();
         });
     </script>
 </body>
