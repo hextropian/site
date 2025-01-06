@@ -304,36 +304,76 @@
 
         // Form validation code (new code)
         // Forbidden email domains
-        const BLOCKED_DOMAINS = ['gmail.com', 'yahoo.com'];
+        const BLOCKED_DOMAINS = [
+            'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 
+            'aol.com', 'mail.com', 'protonmail.com', 'icloud.com'
+        ];
 
         // Phone number regex for international format
         const PHONE_REGEX = /^\+?[1-9]\d{1,14}$|^$|^[0-9]{10}$/;
 
-        // Basic name validation
+        // Enhanced name validation
         function isValidName(name) {
-            // At least 2 characters, only letters, spaces, hyphens, and apostrophes
-            const nameRegex = /^[a-zA-Z\s'-]{2,50}$/;
-            return nameRegex.test(name.trim());
-        }
-
-        // Company name validation
-        function isValidCompany(company) {
-            // At least 2 characters, allowing common business name characters
-            // Excludes obviously fake inputs with repeated characters
-            const repeatedChars = /(.)\1{4,}/;  // Checks for 5 or more repeated characters
-            if (repeatedChars.test(company)) {
+            // Must contain at least one space (first and last name)
+            if (!name.includes(' ')) {
                 return false;
             }
             
-            // Allow letters, numbers, spaces, and common punctuation
-            const companyRegex = /^[a-zA-Z0-9\s'.,&()-]{2,100}$/;
-            return companyRegex.test(company.trim());
+            // Check for random string patterns (too many consonants in a row, weird character distributions)
+            const consonantGroups = name.match(/[bcdfghjklmnpqrstvwxyz]{4,}/gi);
+            if (consonantGroups) {
+                return false;
+            }
+            
+            // Check for keyboard patterns
+            const keyboardPatterns = /(?:qwerty|asdfgh|zxcvbn)/i;
+            if (keyboardPatterns.test(name)) {
+                return false;
+            }
+            
+            // Final regex check - only allow letters, spaces, hyphens, and apostrophes
+            // Also enforce reasonable length and capitalization
+            const nameRegex = /^[A-Z][a-z]+(?:[\s-'][A-Z][a-z]+)*$/;
+            return nameRegex.test(name.trim()) && name.length >= 4 && name.length <= 50;
         }
 
-        // Email validation including domain check
+        // Enhanced company validation
+        function isValidCompany(company) {
+            // Check for random string patterns
+            const consonantGroups = company.match(/[bcdfghjklmnpqrstvwxyz]{4,}/gi);
+            if (consonantGroups) {
+                return false;
+            }
+            
+            // Check character distribution
+            const chars = company.toLowerCase().split('');
+            const charCount = chars.reduce((acc, char) => {
+                acc[char] = (acc[char] || 0) + 1;
+                return acc;
+            }, {});
+            
+            // Check if any character appears too frequently
+            const totalChars = chars.length;
+            for (let count of Object.values(charCount)) {
+                if (count / totalChars > 0.4) { // No character should be more than 40% of the string
+                    return false;
+                }
+            }
+            
+            // Must contain at least one vowel
+            if (!/[aeiou]/i.test(company)) {
+                return false;
+            }
+            
+            // Final regex check - allow common business characters but with stricter rules
+            const companyRegex = /^[A-Z0-9][A-Za-z0-9\s'.,&()-]{1,98}[A-Za-z0-9]$/;
+            return companyRegex.test(company.trim()) && company.length >= 3 && company.length <= 100;
+        }
+
+        // Enhanced email validation
         function isValidEmail(email) {
             // Basic email format validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(email)) {
                 return {
                     valid: false,
@@ -342,11 +382,32 @@
             }
             
             // Check for blocked domains
-            const domain = email.split('@')[1].toLowerCase();
+            const domain = email.toLowerCase().split('@')[1];
             if (BLOCKED_DOMAINS.includes(domain)) {
                 return {
                     valid: false,
                     message: 'Please use a business email address'
+                };
+            }
+            
+            // Check for random string patterns in local part
+            const localPart = email.split('@')[0];
+            
+            // Check for too many numbers
+            const numberCount = (localPart.match(/\d/g) || []).length;
+            if (numberCount > localPart.length / 2) {
+                return {
+                    valid: false,
+                    message: 'Invalid email format'
+                };
+            }
+            
+            // Check for random character patterns
+            const consonantGroups = localPart.match(/[bcdfghjklmnpqrstvwxyz]{4,}/i);
+            if (consonantGroups) {
+                return {
+                    valid: false,
+                    message: 'Invalid email format'
                 };
             }
             
@@ -356,10 +417,36 @@
             };
         }
 
-        // Phone validation
+        // Enhanced phone validation
         function isValidPhone(phone) {
-            if (!phone) return true;  // Empty phone is allowed
-            return PHONE_REGEX.test(phone.replace(/[\s()-]/g, ''));  // Remove common separators before testing
+            if (!phone) return true;  // Empty phone is still allowed
+            
+            // Remove all non-digit characters
+            const digitsOnly = phone.replace(/\D/g, '');
+            
+            // Check for repeated patterns
+            const repeatedPattern = /(.)\1{3,}/;  // 4 or more of the same digit in a row
+            if (repeatedPattern.test(digitsOnly)) {
+                return false;
+            }
+            
+            // Check for sequential numbers
+            const sequential = /(?:0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)/;
+            if (sequential.test(digitsOnly)) {
+                return false;
+            }
+            
+            // Must be a valid length for a phone number (most international numbers are 7-15 digits)
+            if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+                return false;
+            }
+            
+            // Check for all similar digits (e.g., all 1s or all 9s)
+            if (new Set(digitsOnly.split('')).size < 3) {
+                return false;
+            }
+            
+            return true;
         }
 
         // Form validation handler - replaces your existing form handler
