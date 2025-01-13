@@ -188,6 +188,27 @@
             object-fit: contain;
         }
 
+        .logo-bottom-right {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50%; /* Reduces size to 50% */
+            max-width: 150px; /* Ensures it doesn't scale too large */
+            background-color: rgba(200, 200, 200, 0.603); /* Light grey tone */
+            border: 1px solid #ffd700; /* Gold border */
+            border-radius: 15px; /* Rounded corners */
+            padding: 0.5rem;
+            z-index: 2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-bottom-right img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .overlay-content {
                 width: 90%;
@@ -232,6 +253,9 @@
                 <button class="cta-button" data-toggle="modal" data-target="#subscribeModal">Stay Updated</button>
             </div>
         </div>
+        <div class="logo-bottom-right">
+            <img src="assets/NIP.png" alt="NIP Logo">
+        </div>
     </header>
 
     <section class="small-sections">
@@ -262,6 +286,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="subscribeForm" action="https://docs.google.com/forms/d/e/1FAIpQLScrwJBgtWKMwkRJswRmQE0pPLCxx6AhDRLDUhKlEWZ6-fQ4TA/formResponse" method="POST" target="_blank">
+                        <div style="display: none;">
+                            <label for="honeypot">Leave this field empty</label>
+                            <input type="text" id="honeypot" name="honeypot">
+                        </div>
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="entry.842495624" required>
@@ -306,7 +334,7 @@
         // Forbidden email domains
         const BLOCKED_DOMAINS = [
             'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 
-            'aol.com', 'mail.com', 'protonmail.com', 'icloud.com'
+            'aol.com', 'mail.com', 'protonmail.com'
         ];
 
         // Phone number regex for international format
@@ -451,6 +479,13 @@
 
         // Form validation handler - replaces your existing form handler
         document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+            const honeypot = document.getElementById('honeypot').value;
+
+            if (honeypot) {
+                e.preventDefault(); // Prevent form submission
+                alert('Spam detected! Submission rejected.');
+                return;
+            }
             e.preventDefault();  // Always prevent default first
             
             const name = document.getElementById('name').value;
