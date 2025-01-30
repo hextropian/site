@@ -2,11 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hextropian Systems</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -17,64 +12,61 @@
             color: #ddd;
             overflow-x: hidden;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             margin: 0;
             padding: 0;
-        }
-
-        .hero-section {
-            position: relative;
-            height: 558px;
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            color: #ffffff;
-            overflow: hidden;
-            padding-right: 2rem;
+            flex-direction: column;
         }
 
-        .video-background {
-            position: absolute;
+        .video-container {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: fill;
+            height: 100vh;
             z-index: 0;
+        }
+
+        .video-background {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             filter: brightness(0.8);
         }
 
-        .overlay-content {
+        .content-container {
             position: relative;
             z-index: 1;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid #ffd700;
-            width: 40%;
-            color: #c7b374;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 5rem;
         }
 
-        .overlay-content h1 {
+        .overlay-box {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+            color: #c7b374;
+        }
+
+        .overlay-box h1 {
             margin-bottom: 0.5rem;
             font-size: 2rem;
             font-weight: normal;
         }
 
-        .overlay-content p.subtitle {
-            font-size: 1.2rem;
-            margin-top: 0.5rem;
-        }
-
-        .cta-message {
-            margin-top: 1rem;
+        .overlay-box p {
+            margin-bottom: 1rem;
         }
 
         .cta-button {
             display: inline-block;
-            margin-top: 0.5rem;
             padding: 0.5rem 1rem;
             font-size: 1rem;
             color: #111;
@@ -90,46 +82,6 @@
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
             text-decoration: none;
             color: #111;
-        }
-
-        .small-sections {
-            background-color: #222;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            color: #c7b374;
-            margin-top: auto;
-        }
-
-        .small-box {
-            background: rgba(33, 37, 41, 0.8);
-            padding: 1rem;
-            border-radius: 15px;
-            margin-bottom: 1rem;
-            width: calc(33.333% - 1rem);
-        }
-
-        .small-box h3 {
-            color: #ffd700;
-            margin-bottom: 1rem;
-        }
-
-        .small-box a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-
-        .small-box a:hover {
-            color: #ffe44d;
-            text-decoration: none;
-        }
-
-        .footer {
-            background-color: #000;
-            color: #ddd;
-            padding: 10px 0;
-            text-align: center;
         }
 
         .modal-content {
@@ -170,68 +122,27 @@
             box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
         }
 
-        .logo-container {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 100px;
-            height: 100px;
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo-container img {
+        .footer {
+            background-color: transparent;
+            color: #ddd;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-bottom-right {
-            position: absolute;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50%; /* Reduces size to 50% */
-            max-width: 150px; /* Ensures it doesn't scale too large */
-            background-color: rgba(200, 200, 200, 0.603); /* Light grey tone */
-            border: 1px solid #ffd700; /* Gold border */
-            border-radius: 15px; /* Rounded corners */
-            padding: 0.5rem;
-            z-index: 2;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-bottom-right img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            display: block;
+            z-index: 1;
         }
 
         @media (max-width: 768px) {
-            .overlay-content {
-                width: 90%;
-                margin: 0 1rem;
-            }
-
-            .small-box {
-                width: 100%;
-            }
-            
-            .video-background {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+            .content-container {
+                padding: 1rem;
+                padding-bottom: 4rem;
             }
         }
     </style>
 </head>
 <body>
-    <header class="hero-section">
-        <div class="logo-container">
-            <img src="assets/logo_small.webp" alt="Hextropian Systems Logo">
-        </div>
+    <div class="video-container">
         <video 
             id="bgVideo"
             class="video-background" 
@@ -244,36 +155,18 @@
             oncanplay="this.play()">
             <source src="assets/gold_plexus.mp4" type="video/mp4">
         </video>
+    </div>
 
-        <div class="overlay-content">
-            <h1>Hextropian Systems</h1>
-            <p class="subtitle">The Convergence of Security and GenAI</p>
-            <div class="cta-message">
+    <div class="content-container">
+        <div class="container">
+            <div class="overlay-box">
+                <h1>Hextropian Systems</h1>
+                <p class="subtitle">The Convergence of Security and GenAI</p>
                 <p>Be the first to know when we launch</p>
                 <button class="cta-button" data-toggle="modal" data-target="#subscribeModal">Stay Updated</button>
             </div>
         </div>
-        <div class="logo-bottom-right">
-            <img src="assets/NIP.png" alt="NIP Logo">
-        </div>
-    </header>
-
-    <section class="small-sections">
-        <div class="small-box">
-            <h3>About</h3>
-            <p>We're revolutionizing enterprise security operations by leveraging advanced agentic AI systems that automate 
-                decision-making processes with exceptional accuracy and efficiency, regardless of the tools you currently have.
-            </p>
-        </div>
-        <div class="small-box">
-            <h3>Team</h3>
-            <p>The management team, advisors, and main investors will be announced soon.</p>
-        </div>
-        <div class="small-box">
-            <h3>Contact</h3>
-            <p><a href="mailto:hextropian@hextropian.systems?subject=Inquiry">Contact us</a> via email.</p>
-        </div>
-    </section>
+    </div>
 
     <div class="modal fade" id="subscribeModal" tabindex="-1" role="dialog" aria-labelledby="subscribeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -314,14 +207,14 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2025 Hextropian Systems, Inc. All rights reserved.</p>
+        
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Video loading code (keep your existing video code)
+        // Video loading code
         document.getElementById('bgVideo').addEventListener('loadeddata', function() {
             document.body.classList.add('video-loaded');
         });
@@ -330,15 +223,11 @@
             document.getElementById('bgVideo').setAttribute('preload', 'metadata');
         }
 
-        // Form validation code (new code)
         // Forbidden email domains
         const BLOCKED_DOMAINS = [
             'yahoo.com', 'hotmail.com', 'outlook.com', 
             'aol.com', 'mail.com', 'protonmail.com'
         ];
-
-        // Phone number regex for international format
-        const PHONE_REGEX = /^\+?[1-9]\d{1,14}$|^$|^[0-9]{10}$/;
 
         // Enhanced name validation
         function isValidName(name) {
@@ -477,7 +366,7 @@
             return true;
         }
 
-        // Form validation handler - replaces your existing form handler
+        // Form validation handler
         document.getElementById('subscribeForm').addEventListener('submit', function(e) {
             const honeypot = document.getElementById('honeypot').value;
 
